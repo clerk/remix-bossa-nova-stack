@@ -64,7 +64,7 @@ npm run dev
 
 Visit http://localhost:3000. If everything is set up correctly, you should see something that looks like this:
 
-<img width="1771" alt="App's screenshot" src="./public/images/screenshot.png">
+<img width="1771" alt="App's screenshot" src="./public/images/app-screenshot.png">
 
 That's it! You're all set to start building your Remix application with complete user management provided by [Clerk](https://clerk.dev).
 
