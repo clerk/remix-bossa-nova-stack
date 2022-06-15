@@ -10,15 +10,15 @@ Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ## What's in the stack
 
-- User management with [Clerk](https://clerk.dev)
-- Database with [Supabase](https://supabase.com)
-- Styling with [Chakra UI](https://chakra-ui.com/)
-- Deployment with [Vercel](https://www.vercel.com/)
-- End-to-end testing with [Cypress](https://cypress.io)
-- Unit testing with [Jest](https://jestjs.io/) and [Testing Library](https://testing-library.com)
-- Code formatting with [Prettier](https://prettier.io)
-- Linting with [ESLint](https://eslint.org)
-- Static Types with [TypeScript](https://typescriptlang.org)
+-   User management with [Clerk](https://clerk.dev)
+-   Database with [Supabase](https://supabase.com)
+-   Styling with [Chakra UI](https://chakra-ui.com/)
+-   Deployment with [Vercel](https://www.vercel.com/)
+-   End-to-end testing with [Cypress](https://cypress.io)
+-   Unit testing with [Jest](https://jestjs.io/) and [Testing Library](https://testing-library.com)
+-   Code formatting with [Prettier](https://prettier.io)
+-   Linting with [ESLint](https://eslint.org)
+-   Static Types with [TypeScript](https://typescriptlang.org)
 
 ## Development
 
@@ -62,11 +62,11 @@ Start your development instance
 npm run dev
 ```
 
-Visit http://localhost:3000/. If everything is set up correctly, you should see something that looks like this:
+Visit http://localhost:3000. If everything is set up correctly, you should see something that looks like this:
 
-<img width="1771" alt="Screen Shot 2022-05-25 at 9 52 23 PM" src="https://user-images.githubusercontent.com/96198083/170412460-f1b7884e-f1bc-445e-bc1d-79691fc1dafb.png">
+<img width="1771" alt="App's screenshot" src="./public/images/screenshot.png">
 
-That's it! You're all set to start building your Remix application with complete user management provided by Clerk.
+That's it! You're all set to start building your Remix application with complete user management provided by [Clerk](https://clerk.dev).
 
 ## Database
 
