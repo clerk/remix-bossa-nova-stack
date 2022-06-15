@@ -1,44 +1,58 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/remix';
-import { Link } from '@remix-run/react';
-import LogoBanner from '../components/logo-banner';
+import { SignedIn, SignedOut, useUser, useAuth } from '@clerk/remix'
+import { Button, Flex, Heading, Stack, Text } from '@chakra-ui/react'
+import { Link } from '@remix-run/react'
+import { LogoBanner } from 'components'
 
 export default function Index() {
-  const { user } = useUser();
+    const { user } = useUser()
+    const { signOut } = useAuth()
 
-  return (
-    <main className="flex flex-col items-center justify-center flex-1 text-white backdrop-blur-sm">
-      <div className="pb-10">
-        <h1 className="font-bold text-center uppercase text-9xl text-shadow-lg">
-          New Wave Stack
-        </h1>
-        <p className="mt-6 text-lg text-center text-shadow-lg">
-          Check out the README for instructions on how to get this project
-          deployed.
-        </p>
-      </div>
-      <SignedOut>
-        <div className="flex flex-row justify-around w-1/4 mx-auto mt-10 mb-20 text-2xl text-white">
-          <Link
-            to="/sign-in"
-            className="inline-block py-3 text-lg font-medium leading-snug text-center text-blue-600 transition duration-150 ease-in-out bg-white rounded shadow-md px-7 hover:bg-gray-100 hover:shadow-lg focus:bg-gray-100 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
-          >
-            Sign in
-          </Link>
-          <Link
-            to="/sign-up"
-            className="inline-block py-3 text-lg font-medium leading-snug text-center text-white transition duration-150 ease-in-out bg-blue-600 rounded shadow-md px-7 hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg"
-          >
-            Sign up
-          </Link>
-        </div>
-      </SignedOut>
-      <SignedIn>
-        <h2 className="pb-20 text-5xl font-bold text-shadow-lg">
-          {['Hey', user?.firstName].filter(Boolean).join(' ')}, sweet dreams are
-          made of this...
-        </h2>
-      </SignedIn>
-      <LogoBanner />
-    </main>
-  );
+    return (
+        <Stack
+            justify='center'
+            textAlign='center'
+            h='100vh'
+            flex={1}
+            color='white'
+            gap={20}
+        >
+            <Stack gap={4}>
+                <Heading
+                    as='h1'
+                    size='4xl'
+                    textTransform='uppercase'
+                    color='green.400'
+                >
+                    Bossa Nova Stack
+                </Heading>
+
+                <Text size='lg'>
+                    Check the README file for instructions on how to get this
+                    project deployed.
+                </Text>
+            </Stack>
+
+            <SignedOut>
+                <Flex justify='center' gap={4}>
+                    <Button as={Link} to='/sign-in' bg='gray.500'>
+                        Sign in
+                    </Button>
+
+                    <Button as={Link} to='/sign-up'>
+                        Sign up
+                    </Button>
+                </Flex>
+            </SignedOut>
+
+            <SignedIn>
+                <Stack align='center' gap={4}>
+                    <Heading>{user && `Hi there, ${user.firstName}.`}</Heading>
+
+                    <Button onClick={() => signOut()}>Sign out</Button>
+                </Stack>
+            </SignedIn>
+
+            <LogoBanner />
+        </Stack>
+    )
 }

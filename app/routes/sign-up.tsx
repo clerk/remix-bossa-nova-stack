@@ -1,9 +1,10 @@
+import { Center } from '@chakra-ui/react';
 import { SignUp } from '@clerk/remix';
 
 export default function SignUpRoute() {
   return (
-    <div className="backdrop-blur-sm">
+    <Center height="100vh" p={10}>
       <SignUp routing="path" path="/sign-up" signInUrl="/sign-in" />
-    </div>
+    </Center>
   );
 }

@@ -1,55 +1,66 @@
 {
-  "name": "remix-bossa-nova-stack",
-  "version": "0.0.1",
-  "private": true,
-  "description": "The Remix Stack for deploying to Netlify with Clerk authentication, Supabase, Chakra UI, testing, linting, and more.",
-  "keywords": [
-    "remix",
-    "remix-stack",
-    "clerk",
-    "supabase",
-    "chakra-ui",
-    "vercel"
-  ],
-  "license": "MIT",
-  "sideEffects": false,
-  "scripts": {
-    "build": "remix build",
-    "dev": "remix dev",
-    "format": "prettier --write .",
-    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
-    "test": "jest",
-    "typecheck": "tsc -b && tsc -b cypress"
-  },
-  "dependencies": {
-    "@clerk/remix": "^0.5.0",
-    "@remix-run/vercel": "^1.5.1",
-    "@remix-run/node": "*",
-    "@remix-run/react": "*",
-    "cross-env": "^7.0.3",
-    "jest": "^28.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "devDependencies": {
-    "@remix-run/dev": "*",
-    "@remix-run/eslint-config": "*",
-    "@testing-library/dom": "^8.13.0",
-    "@testing-library/react": "12",
-    "@types/jest": "^27.5.1",
-    "@types/react": "^17.0.45",
-    "@types/react-dom": "^17.0.17",
-    "cypress": "^9.6.1",
-    "eslint": "^8.15.0",
-    "prettier": "^2.6.2",
-    "typescript": "^4.6.4"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "./cypress/*"
-    ]
-  },
-  "engines": {
-    "node": ">=14"
-  }
+    "name": "remix-bossa-nova-stack",
+    "version": "0.0.1",
+    "private": true,
+    "description": "The Remix Stack for deploying to Netlify with Clerk authentication, Supabase, Chakra UI, testing, linting, and more.",
+    "keywords": [
+        "remix",
+        "remix-stack",
+        "clerk",
+        "supabase",
+        "chakra-ui",
+        "vercel"
+    ],
+    "license": "MIT",
+    "sideEffects": false,
+    "scripts": {
+        "build": "cross-env NODE_ENV=production remix build",
+        "dev": "cross-env NODE_ENV=development remix dev",
+        "postinstall": "remix setup node",
+        "start": "cross-env NODE_ENV=production remix-serve build",
+        "format": "prettier --write .",
+        "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+        "test": "jest",
+        "typecheck": "tsc -b && tsc -b cypress"
+    },
+    "dependencies": {
+        "@chakra-ui/react": "^1.8.6",
+        "@clerk/remix": "^0.5.0",
+        "@emotion/cache": "^11.9.3",
+        "@emotion/react": "^11.8.1",
+        "@emotion/server": "^11.4.0",
+        "@emotion/styled": "^11.8.1",
+        "@remix-run/node": "*",
+        "@remix-run/react": "*",
+        "@remix-run/serve": "^1.6.0",
+        "@remix-run/vercel": "^1.5.1",
+        "cross-env": "^7.0.3",
+        "focus-visible": "^5.2.0",
+        "framer-motion": "^6.2.8",
+        "jest": "^28.1.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "remix": "^1.6.0"
+    },
+    "devDependencies": {
+        "@remix-run/dev": "*",
+        "@remix-run/eslint-config": "*",
+        "@testing-library/dom": "^8.13.0",
+        "@testing-library/react": "12",
+        "@types/jest": "^27.5.1",
+        "@types/react": "^17.0.45",
+        "@types/react-dom": "^17.0.17",
+        "cypress": "^9.6.1",
+        "eslint": "^8.15.0",
+        "prettier": "^2.6.2",
+        "typescript": "^4.6.4"
+    },
+    "jest": {
+        "testPathIgnorePatterns": [
+            "./cypress/*"
+        ]
+    },
+    "engines": {
+        "node": ">=14"
+    }
 }
