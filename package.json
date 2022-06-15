@@ -2,7 +2,7 @@
     "name": "remix-bossa-nova-stack",
     "version": "0.0.1",
     "private": true,
-    "description": "The Remix Stack for deploying to Netlify with Clerk authentication, Supabase, Chakra UI, testing, linting, and more.",
+    "description": "The Remix Stack with Clerk authentication, Supabase database, Chakra UI, testing, linting, and more.",
     "keywords": [
         "remix",
         "remix-stack",
