@@ -1,62 +1,61 @@
 # Remix Bossa Nova Stack
 
-<!-- ![The Bossa Nova Stack](https://user-images.githubusercontent.com/96198083/170412378-b529b437-cd82-4fd4-add7-4abcfd64997c.png) -->
-
 Learn more about [Remix Stacks](https://remix.run/stacks).
-
-<!-- For more on our thoughts on the New Wave Stack check out our [blog post.](https://clerk.dev/blog/new-wave-stack) -->
-
-<!-- To view this template in deployment visit: [new-wave-stack.netlify.app](https://new-wave-stack.netlify.app/) -->
 
 ## What's in the stack
 
 -   User management with [Clerk](https://clerk.dev)
 -   Database with [Supabase](https://supabase.com)
--   Styling with [Chakra UI](https://chakra-ui.com/)
--   Deployment with [Vercel](https://www.vercel.com/)
+-   Styling with [Chakra UI](https://chakra-ui.com)
+-   Deployment with [Vercel](https://www.vercel.com)
 -   End-to-end testing with [Cypress](https://cypress.io)
--   Unit testing with [Jest](https://jestjs.io/) and [Testing Library](https://testing-library.com)
+-   Unit testing with [Jest](https://jestjs.io) and [Testing Library](https://testing-library.com)
 -   Code formatting with [Prettier](https://prettier.io)
 -   Linting with [ESLint](https://eslint.org)
 -   Static Types with [TypeScript](https://typescriptlang.org)
 
 ## Development
 
-Create a new application on the [Clerk dashboard](https://dashboard.clerk.dev).
-Check out the Clerk docs for more information about **[setting up your Clerk application.](https://clerk.dev/docs/how-to/set-up-your-application)**
+### Installation
 
 Create a new Remix app using the Bossa Nova Stack template:
 
 ```sh
-npx create-remix@latest --template marcelscruz/remix-bossa-nova-stack <your-app>
+npx create-remix@latest --template clerkinc/remix-bossa-nova-stack <app-name>
 ```
 
-Navigate into your project directory
+### Environment variables
+
+For this step, you'll need a [Clerk application](https://dashboard.clerk.dev). Check out the Clerk docs for more information about [setting it up.](https://clerk.dev/docs/how-to/set-up-your-application)
+
+You'll also need a [Supabase project](https://app.supabase.com/).
+
+Finally, if you've already entered your environment variables during the `Installation` step, this step can be skipped.
+
+Navigate into your project directory:
 
 ```sh
-cd <your-app>
+cd <app-name>
 ```
 
-Create a `.env` file.
+Create a `.env` file:
 
 ```sh
 touch .env
 ```
 
-Find your **[Frontend API key and Backend API key](https://dashboard.clerk.dev/last-active?path=api-keys)** on the Clerk Dashboard and add them to that file like this:
+Find your Clerk [Frontend API key and Backend API key](https://dashboard.clerk.dev/last-active?path=api-keys) and your [Supabase URL and anon key](https://supabase.com/docs/guides/api#api-url-and-keys) and add them to that file like this:
 
 ```
 CLERK_FRONTEND_API=<YOUR_FRONTEND_API_KEY>
 CLERK_API_KEY=<YOUR_BACKEND_API_KEY>
+SUPABASE_URL=<YOUR_SUPABASE_URL>
+SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
-Trigger an initial build
+### Running the app
 
-```sh
-npm run build
-```
-
-Start your development instance
+Start your development instance:
 
 ```sh
 npm run dev
@@ -70,15 +69,15 @@ That's it! You're all set to start building your Remix application with complete
 
 ## Database
 
-This template comes pre-configured to make calls to a **[Supabase database](https://supabase.com)**
+This template comes pre-configured to make calls to a [Supabase database](https://supabase.com/database).
 
-To make authenticated calls to a Supabase database, you'll need to use one of Clerk's handy **[JWT Templates](https://clerk.dev/docs/how-to/jwt-templates)**. Check out our **[detailed instructions about setting up Clerk and Supabase](https://clerk.dev/docs/integration/supabase)**.
+To make authenticated calls to a Supabase database, you'll need to use one of Clerk's handy [JWT Templates](https://clerk.dev/docs/how-to/jwt-templates). Check out our [detailed instructions about setting up Clerk and Supabase](https://clerk.dev/docs/integration/supabase).
 
-<!-- For a better understanding about how Fauna works with Remix and Clerk, it is highly recommend to work through Clerk's **[Remix/Clerk/Fauna Tutorial](https://clerk.dev/tutorials/build-movie-emoji-quiz-with-remix-fauna-and-clerk)** -->
+> ❗️ This project is configured to use a JWT template named `supabase`, so use the same value when creating your JWT template on the [Clerk Dashboard](https://dashboard.clerk.dev/last-active?path=jwt-templates). Alternatively, you can change this value in `/app/utils/db.server.ts`.
 
 ## Styling
 
-This template is pre-configured to use Chakra styling. For more information about it, check out the **[Chakra documentation](https://chakra-ui.com/docs)**.
+This template is pre-configured to use Chakra styling. For more information about it, check out the [Chakra documentation](https://chakra-ui.com/docs).
 
 ## Deployment
 
@@ -97,11 +96,11 @@ It is generally recommended to use a Git repository, because future commits will
 
 ### Cypress
 
-We use Cypress for our End-to-End tests in this project. You'll find those in the `cypress` directory. We've included Cypress's example files to help you on your way, but for more information on Cypress, **[check out their official documentation](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress)**.
+Cypress is used for the End-to-End tests in this project. You'll find those in the `cypress` directory. You'll find included Cypress's example files to help you on your way, but for more information on Cypress, [check out their official documentation](https://docs.cypress.io/guides/core-concepts/introduction-to-cypress).
 
 ### Jest/Testing Library
 
-For lower level tests of utilities and individual components, we use [Jest](https://jestjs.io/) and [Testing Library](https://testing-library.com).
+For lower level tests of utilities and individual components, this project uses [Jest](https://jestjs.io/) and [Testing Library](https://testing-library.com).
 
 ### Type Checking
 
@@ -113,4 +112,4 @@ This project uses ESLint for linting. That is configured in `.eslintrc.js`.
 
 ### Formatting
 
-We use [Prettier](https://prettier.io/) for auto-formatting in this project. It's recommended to install an editor plugin (like the [VSCode Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)) to get auto-formatting on save. There's also a `npm run format` script you can run to format all files in the project.
+This project uses [Prettier](https://prettier.io/) for auto-formatting in this project. It's recommended to install an editor plugin (like the [VSCode Prettier plugin](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)) to get auto-formatting on save. There's also a `npm run format` script you can run to format all files in the project.
