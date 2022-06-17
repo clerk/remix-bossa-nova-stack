@@ -1,32 +1,32 @@
-import * as React from 'react';
-import { hydrate } from 'react-dom';
-import { CacheProvider } from '@emotion/react';
-import { RemixBrowser } from 'remix';
+import * as React from 'react'
+import { hydrate } from 'react-dom'
+import { CacheProvider } from '@emotion/react'
+import { RemixBrowser } from 'remix'
 
-import { ClientStyleContext } from './context';
-import { createEmotionCache } from './createEmotionCache';
+import { ClientStyleContext } from './context'
+import { createEmotionCache } from './createEmotionCache'
 
 interface ClientCacheProviderProps {
-  children: React.ReactNode;
+    children: React.ReactNode
 }
 
 function ClientCacheProvider({ children }: ClientCacheProviderProps) {
-  const [cache, setCache] = React.useState(createEmotionCache());
+    const [cache, setCache] = React.useState(createEmotionCache())
 
-  function reset() {
-    setCache(createEmotionCache());
-  }
+    function reset() {
+        setCache(createEmotionCache())
+    }
 
-  return (
-    <ClientStyleContext.Provider value={{ reset }}>
-      <CacheProvider value={cache}>{children}</CacheProvider>
-    </ClientStyleContext.Provider>
-  );
+    return (
+        <ClientStyleContext.Provider value={{ reset }}>
+            <CacheProvider value={cache}>{children}</CacheProvider>
+        </ClientStyleContext.Provider>
+    )
 }
 
 hydrate(
-  <ClientCacheProvider>
-    <RemixBrowser />
-  </ClientCacheProvider>,
-  document
-);
+    <ClientCacheProvider>
+        <RemixBrowser />
+    </ClientCacheProvider>,
+    document,
+)
