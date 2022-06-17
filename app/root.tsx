@@ -7,16 +7,16 @@ import {
     Scripts,
     ScrollRestoration,
 } from '@remix-run/react'
+import { LoaderFunction } from '@remix-run/node'
+import { rootAuthLoader } from '@clerk/remix/ssr.server'
+import { ClerkApp, ClerkCatchBoundary } from '@clerk/remix'
 import { Box, ChakraProvider, Image } from '@chakra-ui/react'
 import { withEmotionCache } from '@emotion/react'
-import { rootAuthLoader } from '@clerk/remix/ssr.server'
-import { LoaderFunctionArgs } from '@clerk/remix/dist/ssr/types'
-import { ClerkApp, ClerkCatchBoundary } from '@clerk/remix'
 import { theme } from 'theme'
 import { ServerStyleContext, ClientStyleContext } from './context'
 import 'focus-visible' // Remove Chakra's outline caused by clicks
 
-export const loader = (args: LoaderFunctionArgs) => rootAuthLoader(args)
+export const loader: LoaderFunction = args => rootAuthLoader(args)
 export const CatchBoundary = ClerkCatchBoundary()
 
 function App() {

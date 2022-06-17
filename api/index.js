@@ -95,10 +95,10 @@ __export(root_exports, {
 });
 var import_react5 = __toESM(require("react"));
 var import_react6 = require("@remix-run/react");
-var import_react7 = require("@chakra-ui/react");
-var import_react8 = require("@emotion/react");
 var import_ssr = require("@clerk/remix/ssr.server");
 var import_remix = require("@clerk/remix");
+var import_react7 = require("@chakra-ui/react");
+var import_react8 = require("@emotion/react");
 
 // app/theme/theme.ts
 var import_react4 = require("@chakra-ui/react");
@@ -250,16 +250,24 @@ function SignUpRoute() {
 // route:/Users/marcelcruz/Developer/clerk/remix-bossa-nova-stack/app/routes/index.tsx
 var routes_exports = {};
 __export(routes_exports, {
-  default: () => Index
+  action: () => action,
+  default: () => Index,
+  loader: () => loader2
 });
-var import_remix4 = require("@clerk/remix");
-var import_react12 = require("@chakra-ui/react");
-var import_react13 = require("@remix-run/react");
+var import_react15 = require("@remix-run/react");
+var import_node = require("@remix-run/node");
+var import_react16 = require("@remix-run/react");
+var import_remix5 = require("@clerk/remix");
+var import_ssr3 = require("@clerk/remix/ssr.server");
+var import_react17 = require("@chakra-ui/react");
 
 // app/components/logo-banner.tsx
 var import_react11 = require("@chakra-ui/react");
 function LogoBanner() {
-  return /* @__PURE__ */ React.createElement(import_react11.Center, {
+  return /* @__PURE__ */ React.createElement(import_react11.Flex, {
+    direction: { base: "column", md: "row" },
+    align: "center",
+    justify: "center",
     bg: "white",
     gap: 8,
     py: 4
@@ -281,46 +289,142 @@ function LogoBanner() {
   }));
 }
 
-// route:/Users/marcelcruz/Developer/clerk/remix-bossa-nova-stack/app/routes/index.tsx
-function Index() {
+// app/components/songs-list.tsx
+var import_react12 = __toESM(require("react"));
+var import_remix4 = require("@clerk/remix");
+var import_react13 = require("@chakra-ui/react");
+var import_react14 = require("@remix-run/react");
+function SongsList({ songs }) {
+  var _a;
   const { user } = (0, import_remix4.useUser)();
-  const { signOut } = (0, import_remix4.useAuth)();
-  return /* @__PURE__ */ React.createElement(import_react12.Stack, {
+  const transition = (0, import_react14.useTransition)();
+  const headingSize = (0, import_react13.useBreakpointValue)({ base: "sm", md: "md" });
+  const formRef = import_react12.default.useRef(null);
+  const addSongRef = import_react12.default.useRef(null);
+  const isAdding = transition.state === "submitting" && transition.submission.formData.get("_action") === "create";
+  import_react12.default.useEffect(() => {
+    var _a2, _b;
+    if (!isAdding) {
+      (_a2 = formRef.current) == null ? void 0 : _a2.reset();
+      (_b = addSongRef.current) == null ? void 0 : _b.focus();
+    }
+  }, [isAdding]);
+  if (!user)
+    return null;
+  return /* @__PURE__ */ import_react12.default.createElement(import_react13.Stack, {
+    align: "stretch",
+    bg: "white",
+    color: "black",
+    gap: 4,
+    px: { base: 8, sm: 10 },
+    py: 6,
+    rounded: "xl",
+    shadow: "xl"
+  }, /* @__PURE__ */ import_react12.default.createElement(import_react13.Heading, {
+    size: headingSize
+  }, user && `Hey ${user.firstName || ((_a = user.primaryEmailAddress) == null ? void 0 : _a.emailAddress)}, here are your favorite songs:`), /* @__PURE__ */ import_react12.default.createElement(import_react13.UnorderedList, {
+    textAlign: "left"
+  }, songs.map((song) => /* @__PURE__ */ import_react12.default.createElement(import_react13.ListItem, {
+    key: song.id
+  }, song.body))), /* @__PURE__ */ import_react12.default.createElement(import_react14.Form, {
+    ref: formRef,
+    method: "post"
+  }, /* @__PURE__ */ import_react12.default.createElement(import_react13.Flex, {
+    direction: { base: "column", md: "row" },
+    gap: 2,
+    w: "full"
+  }, /* @__PURE__ */ import_react12.default.createElement(import_react13.Input, {
+    name: "add-song",
+    ref: addSongRef,
+    type: "text",
+    placeholder: "Add song"
+  }), /* @__PURE__ */ import_react12.default.createElement(import_react13.Button, {
+    type: "submit",
+    name: "_action",
+    value: "create",
+    disabled: transition.state === "submitting"
+  }, "Add"))));
+}
+
+// app/utils/db.server.ts
+var import_ssr2 = require("@clerk/remix/ssr.server");
+var import_supabase_js = require("@supabase/supabase-js");
+var getDB = async (request) => {
+  const { userId, getToken } = await (0, import_ssr2.getAuth)(request);
+  if (!userId)
+    return null;
+  const secret = await getToken({ template: "supabase" });
+  if (!secret)
+    return null;
+  const supabaseUrl = process.env.SUPABASE_URL || "";
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
+  const client = (0, import_supabase_js.createClient)(supabaseUrl, supabaseKey);
+  client.auth.setAuth(secret);
+  return client;
+};
+
+// route:/Users/marcelcruz/Developer/clerk/remix-bossa-nova-stack/app/routes/index.tsx
+var loader2 = async ({ request }) => {
+  const db = await getDB(request);
+  if (!db)
+    return null;
+  const { data } = await db.from("songs").select();
+  return (0, import_node.json)({ songs: data });
+};
+var action = async ({ request }) => {
+  const formData = await request.formData();
+  const { userId } = await (0, import_ssr3.getAuth)(request);
+  const song = formData.get("add-song");
+  const db = await getDB(request);
+  if (!db)
+    return null;
+  await db.from("songs").insert({ body: song, user_id: userId });
+  return null;
+};
+function Index() {
+  const { signOut } = (0, import_remix5.useAuth)();
+  const { songs } = (0, import_react15.useLoaderData)() || {};
+  const headingSize = (0, import_react17.useBreakpointValue)({ base: "lg", sm: "2xl", lg: "4xl" });
+  return /* @__PURE__ */ React.createElement(import_react17.Stack, {
     justify: "center",
     textAlign: "center",
     h: "100vh",
     flex: 1,
     color: "white",
     gap: 20
-  }, /* @__PURE__ */ React.createElement(import_react12.Stack, {
-    gap: 4
-  }, /* @__PURE__ */ React.createElement(import_react12.Heading, {
+  }, /* @__PURE__ */ React.createElement(import_react17.Stack, {
+    gap: 4,
+    p: { base: 4, md: 8 }
+  }, /* @__PURE__ */ React.createElement(import_react17.Heading, {
     as: "h1",
-    size: "4xl",
+    size: headingSize,
     textTransform: "uppercase",
     color: "green.400"
-  }, "Bossa Nova Stack"), /* @__PURE__ */ React.createElement(import_react12.Text, {
+  }, "Bossa Nova Stack"), /* @__PURE__ */ React.createElement(import_react17.Text, {
     size: "lg"
-  }, "Check the README file for instructions on how to get this project deployed.")), /* @__PURE__ */ React.createElement(import_remix4.SignedOut, null, /* @__PURE__ */ React.createElement(import_react12.Flex, {
+  }, "Check the README file for instructions on how to get this project deployed."), /* @__PURE__ */ React.createElement(import_remix5.SignedOut, null, /* @__PURE__ */ React.createElement(import_react17.Flex, {
     justify: "center",
     gap: 4
-  }, /* @__PURE__ */ React.createElement(import_react12.Button, {
-    as: import_react13.Link,
+  }, /* @__PURE__ */ React.createElement(import_react17.Button, {
+    as: import_react16.Link,
     to: "/sign-in",
     bg: "gray.500"
-  }, "Sign in"), /* @__PURE__ */ React.createElement(import_react12.Button, {
-    as: import_react13.Link,
+  }, "Sign in"), /* @__PURE__ */ React.createElement(import_react17.Button, {
+    as: import_react16.Link,
     to: "/sign-up"
-  }, "Sign up"))), /* @__PURE__ */ React.createElement(import_remix4.SignedIn, null, /* @__PURE__ */ React.createElement(import_react12.Stack, {
+  }, "Sign up"))), /* @__PURE__ */ React.createElement(import_remix5.SignedIn, null, /* @__PURE__ */ React.createElement(import_react17.Stack, {
     align: "center",
     gap: 4
-  }, /* @__PURE__ */ React.createElement(import_react12.Heading, null, user && `Hi there, ${user.firstName}.`), /* @__PURE__ */ React.createElement(import_react12.Button, {
-    onClick: () => signOut()
-  }, "Sign out"))), /* @__PURE__ */ React.createElement(LogoBanner, null));
+  }, /* @__PURE__ */ React.createElement(SongsList, {
+    songs
+  }), /* @__PURE__ */ React.createElement(import_react17.Button, {
+    onClick: () => signOut(),
+    bg: "gray.500"
+  }, "Sign out")))), /* @__PURE__ */ React.createElement(LogoBanner, null));
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "faf53d17", "entry": { "module": "/build/entry.client-ZGM5CEHM.js", "imports": ["/build/_shared/chunk-YUJEHUNW.js", "/build/_shared/chunk-VMGFVQCX.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-COCTO2NK.js", "imports": ["/build/_shared/chunk-VNB43UN3.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-QN7SWIL3.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-in": { "id": "routes/sign-in", "parentId": "root", "path": "sign-in", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-in-H7BK2OSS.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-up": { "id": "routes/sign-up", "parentId": "root", "path": "sign-up", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-up-3HBJ2OUI.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-FAF53D17.js" };
+var assets_manifest_default = { "version": "53b08002", "entry": { "module": "/build/entry.client-TZ2VBVA4.js", "imports": ["/build/_shared/chunk-HORVLYMY.js", "/build/_shared/chunk-5Y6L6JGX.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-GYWM4BVG.js", "imports": ["/build/_shared/chunk-ICOEXLKL.js", "/build/_shared/chunk-QVLK5XTS.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-WL4MJCXN.js", "imports": void 0, "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-in": { "id": "routes/sign-in", "parentId": "root", "path": "sign-in", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-in-EP62J73S.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-up": { "id": "routes/sign-up", "parentId": "root", "path": "sign-up", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-up-WSLJVX32.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-53B08002.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };
