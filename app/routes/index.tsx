@@ -15,11 +15,24 @@ import {
 import { LogoBanner, SongsList } from 'components'
 import { getDB } from 'utils'
 
+const dbErrorMessage =
+    'Something is missing.<br/>Did you set up Supabase yet?<br/>You can find the <a href="https://github.com/clerkinc/remix-bossa-nova-stack#configuring-the-database" target="_blank">instructions in the README file</a>.'
+
 export const loader: LoaderFunction = async ({ request }) => {
+    const { userId } = await getAuth(request)
+    if (!userId) return null
+
     const db = await getDB(request)
-    if (!db) return null
+    if (!db) {
+        return json({ error: dbErrorMessage })
+    }
 
     const { data } = await db.from('songs').select()
+
+    if (!data) {
+        return json({ error: dbErrorMessage })
+    }
+
     return json({ songs: data })
 }
 
@@ -38,7 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Index() {
     const { signOut } = useAuth()
-    const { songs } = useLoaderData() || {}
+    const data = useLoaderData()
     const headingSize = useBreakpointValue({ base: 'lg', sm: '2xl', lg: '4xl' })
 
     return (
@@ -79,8 +92,22 @@ export default function Index() {
 
                 <SignedIn>
                     <Stack align='center' gap={4}>
-                        <SongsList songs={songs} />
+                        <SongsList songs={data?.songs || []} />
 
+                        {data?.error && (
+                            <Text
+                                color='red.500'
+                                fontWeight='bold'
+                                sx={{
+                                    '& a': {
+                                        textDecoration: 'underline',
+                                    },
+                                }}
+                                dangerouslySetInnerHTML={{
+                                    __html: data.error,
+                                }}
+                            />
+                        )}
                         <Button onClick={() => signOut()} bg='gray.500'>
                             Sign out
                         </Button>

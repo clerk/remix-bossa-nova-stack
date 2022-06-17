@@ -350,25 +350,37 @@ function SongsList({ songs }) {
 var import_ssr2 = require("@clerk/remix/ssr.server");
 var import_supabase_js = require("@supabase/supabase-js");
 var getDB = async (request) => {
-  const { userId, getToken } = await (0, import_ssr2.getAuth)(request);
-  if (!userId)
+  try {
+    const { userId, getToken } = await (0, import_ssr2.getAuth)(request);
+    if (!userId)
+      return null;
+    const secret = await getToken({ template: "supabase" });
+    if (!secret)
+      return null;
+    const supabaseUrl = process.env.SUPABASE_URL || "";
+    const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
+    const client = (0, import_supabase_js.createClient)(supabaseUrl, supabaseKey);
+    client.auth.setAuth(secret);
+    return client;
+  } catch (error) {
     return null;
-  const secret = await getToken({ template: "supabase" });
-  if (!secret)
-    return null;
-  const supabaseUrl = process.env.SUPABASE_URL || "";
-  const supabaseKey = process.env.SUPABASE_ANON_KEY || "";
-  const client = (0, import_supabase_js.createClient)(supabaseUrl, supabaseKey);
-  client.auth.setAuth(secret);
-  return client;
+  }
 };
 
 // route:/Users/marcelcruz/Developer/clerk/remix-bossa-nova-stack/app/routes/index.tsx
+var dbErrorMessage = 'Something is missing.<br/>Did you set up Supabase yet?<br/>You can find the <a href="https://github.com/clerkinc/remix-bossa-nova-stack#configuring-the-database" target="_blank">instructions in the README file</a>.';
 var loader2 = async ({ request }) => {
-  const db = await getDB(request);
-  if (!db)
+  const { userId } = await (0, import_ssr3.getAuth)(request);
+  if (!userId)
     return null;
+  const db = await getDB(request);
+  if (!db) {
+    return (0, import_node.json)({ error: dbErrorMessage });
+  }
   const { data } = await db.from("songs").select();
+  if (!data) {
+    return (0, import_node.json)({ error: dbErrorMessage });
+  }
   return (0, import_node.json)({ songs: data });
 };
 var action = async ({ request }) => {
@@ -383,7 +395,7 @@ var action = async ({ request }) => {
 };
 function Index() {
   const { signOut } = (0, import_remix5.useAuth)();
-  const { songs } = (0, import_react15.useLoaderData)() || {};
+  const data = (0, import_react15.useLoaderData)();
   const headingSize = (0, import_react17.useBreakpointValue)({ base: "lg", sm: "2xl", lg: "4xl" });
   return /* @__PURE__ */ React.createElement(import_react17.Stack, {
     justify: "center",
@@ -416,7 +428,18 @@ function Index() {
     align: "center",
     gap: 4
   }, /* @__PURE__ */ React.createElement(SongsList, {
-    songs
+    songs: (data == null ? void 0 : data.songs) || []
+  }), (data == null ? void 0 : data.error) && /* @__PURE__ */ React.createElement(import_react17.Text, {
+    color: "red.500",
+    fontWeight: "bold",
+    sx: {
+      "& a": {
+        textDecoration: "underline"
+      }
+    },
+    dangerouslySetInnerHTML: {
+      __html: data.error
+    }
   }), /* @__PURE__ */ React.createElement(import_react17.Button, {
     onClick: () => signOut(),
     bg: "gray.500"
@@ -424,7 +447,7 @@ function Index() {
 }
 
 // server-assets-manifest:@remix-run/dev/assets-manifest
-var assets_manifest_default = { "version": "f0ffd1dd", "entry": { "module": "/build/entry.client-DY2JAYU2.js", "imports": ["/build/_shared/chunk-HORVLYMY.js", "/build/_shared/chunk-5Y6L6JGX.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-GYWM4BVG.js", "imports": ["/build/_shared/chunk-ICOEXLKL.js", "/build/_shared/chunk-QVLK5XTS.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-WL4MJCXN.js", "imports": void 0, "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-in": { "id": "routes/sign-in", "parentId": "root", "path": "sign-in", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-in-GJ6WYFNV.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-up": { "id": "routes/sign-up", "parentId": "root", "path": "sign-up", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-up-ULWSWACB.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-F0FFD1DD.js" };
+var assets_manifest_default = { "version": "89fe0afb", "entry": { "module": "/build/entry.client-TWBCX3ET.js", "imports": ["/build/_shared/chunk-IOMVH2XD.js", "/build/_shared/chunk-EWCRA4YU.js"] }, "routes": { "root": { "id": "root", "parentId": void 0, "path": "", "index": void 0, "caseSensitive": void 0, "module": "/build/root-AB4LEOHB.js", "imports": ["/build/_shared/chunk-2R2M4TBS.js", "/build/_shared/chunk-OJTP3DI7.js"], "hasAction": false, "hasLoader": true, "hasCatchBoundary": true, "hasErrorBoundary": false }, "routes/index": { "id": "routes/index", "parentId": "root", "path": void 0, "index": true, "caseSensitive": void 0, "module": "/build/routes/index-DBGFDIGG.js", "imports": void 0, "hasAction": true, "hasLoader": true, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-in": { "id": "routes/sign-in", "parentId": "root", "path": "sign-in", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-in-MCOUATHJ.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false }, "routes/sign-up": { "id": "routes/sign-up", "parentId": "root", "path": "sign-up", "index": void 0, "caseSensitive": void 0, "module": "/build/routes/sign-up-6SWQKAWZ.js", "imports": void 0, "hasAction": false, "hasLoader": false, "hasCatchBoundary": false, "hasErrorBoundary": false } }, "url": "/build/manifest-89FE0AFB.js" };
 
 // server-entry-module:@remix-run/dev/server-build
 var entry = { module: entry_server_exports };

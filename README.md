@@ -53,6 +53,27 @@ SUPABASE_URL=<YOUR_SUPABASE_URL>
 SUPABASE_ANON_KEY=<YOUR_SUPABASE_ANON_KEY>
 ```
 
+### Configuring the database
+
+This template comes pre-configured to make calls to a [Supabase database](https://supabase.com/database).
+
+To make authenticated calls to a Supabase database, you'll need to use one of Clerk's handy [JWT Templates](https://clerk.dev/docs/how-to/jwt-templates). Check out our [detailed instructions about setting up Clerk and Supabase](https://clerk.dev/docs/integration/supabase).
+
+Also, you'll need to create a table called `songs` with the following columns in your Supabase database:
+
+| Column name | Column type |
+| ----------- | ----------- |
+| id          | uuid        |
+| created_at  | timestamptz |
+| user_id     | text        |
+| body        | text        |
+
+In the end, it should look like this:
+
+<img width="1000" alt="App's screenshot" src="./public/images/supabase-columns.png">
+
+> ❗️ This project is configured to use a JWT template named `supabase`, so use the same value when creating your JWT template on the [Clerk Dashboard](https://dashboard.clerk.dev/last-active?path=jwt-templates). Alternatively, you can change this value in `/app/utils/db.server.ts`.
+
 ### Running the app
 
 Start your development instance:
@@ -66,14 +87,6 @@ Visit http://localhost:3000. If everything is set up correctly, you should see s
 <img width="1771" alt="App's screenshot" src="./public/images/app-screenshot.png">
 
 That's it! You're all set to start building your Remix application with complete user management provided by [Clerk](https://clerk.dev).
-
-## Database
-
-This template comes pre-configured to make calls to a [Supabase database](https://supabase.com/database).
-
-To make authenticated calls to a Supabase database, you'll need to use one of Clerk's handy [JWT Templates](https://clerk.dev/docs/how-to/jwt-templates). Check out our [detailed instructions about setting up Clerk and Supabase](https://clerk.dev/docs/integration/supabase).
-
-> ❗️ This project is configured to use a JWT template named `supabase`, so use the same value when creating your JWT template on the [Clerk Dashboard](https://dashboard.clerk.dev/last-active?path=jwt-templates). Alternatively, you can change this value in `/app/utils/db.server.ts`.
 
 ## Styling
 
