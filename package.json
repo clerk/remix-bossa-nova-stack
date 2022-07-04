@@ -1,6 +1,5 @@
 {
     "name": "remix-bossa-nova-stack",
-    "version": "0.0.1",
     "private": true,
     "description": "The Remix Stack with Clerk authentication, Supabase database, Chakra UI, testing, linting, and more.",
     "keywords": [
@@ -16,7 +15,6 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production remix build",
         "dev": "cross-env NODE_ENV=development remix dev",
-        "postinstall": "remix setup node",
         "start": "cross-env NODE_ENV=production remix-serve build",
         "format": "prettier --write .",
         "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
