@@ -59,6 +59,8 @@ This template comes pre-configured to make calls to a [Supabase database](https:
 
 To make authenticated calls to a Supabase database, you'll need to use one of Clerk's handy [JWT Templates](https://clerk.dev/docs/how-to/jwt-templates). Check out our [detailed instructions about setting up Clerk and Supabase](https://clerk.dev/docs/integration/supabase).
 
+> ❗️ This project is configured to use a JWT template named `supabase`, so use the same value when creating your JWT template on the [Clerk Dashboard](https://dashboard.clerk.dev/last-active?path=jwt-templates). Alternatively, you can change this value in `/app/utils/db.server.ts`.
+
 Also, you'll need to create a table called `songs` with the following columns in your Supabase database:
 
 | Column name | Column type |
@@ -72,7 +74,32 @@ In the end, it should look like this:
 
 <img width="1000" alt="App's screenshot" src="./public/images/supabase-columns.png">
 
-> ❗️ This project is configured to use a JWT template named `supabase`, so use the same value when creating your JWT template on the [Clerk Dashboard](https://dashboard.clerk.dev/last-active?path=jwt-templates). Alternatively, you can change this value in `/app/utils/db.server.ts`.
+Next, we need to ensure that only authenticated users can add new songs and that these users can only retrieve songs they've added.
+For that, we'll enable RLS for the newly created `songs` table.
+Head over to the SQL editor on your Supabase project, paste and run the following query:
+
+```sql
+create or replace function requesting_user_id()
+returns text
+language sql stable
+as $$
+  select nullif(current_setting('request.jwt.claims', true)::json->>'sub', '')::text;
+$$;
+```
+
+This will create a `requesting_user_id()` function that can be used within an RLS policy.
+
+Now, navigate to "Authentication", then "Policies", enable RLS for the `songs` table, if not yet enabled, and create two new policies from scratch.
+
+One for inserting new songs:
+
+<img width="1000" alt="Insert policy" src="./public/images/insert-policy.png">
+
+And one for selecting existing songs:
+
+<img width="1000" alt="Select policy" src="./public/images/select-policy.png">
+
+Your database is now fully configured and protected.
 
 ### Running the app
 
