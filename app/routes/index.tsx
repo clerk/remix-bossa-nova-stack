@@ -77,8 +77,7 @@ export default function Index() {
                 <Text size='lg'>
                     Check the{' '}
                     <ChakraLink
-                        as={Link}
-                        to='https://github.com/clerkinc/remix-bossa-nova-stack/blob/main/README.md'
+                        href='https://github.com/clerkinc/remix-bossa-nova-stack/blob/main/README.md'
                         isExternal
                         textDecoration='underline'
                         color='white'
