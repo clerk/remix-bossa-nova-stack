@@ -8,6 +8,7 @@ import {
     Button,
     Flex,
     Heading,
+    Link as ChakraLink,
     Stack,
     Text,
     useBreakpointValue,
@@ -74,8 +75,20 @@ export default function Index() {
                 </Heading>
 
                 <Text size='lg'>
-                    Check the README file for instructions on how to get this
-                    project deployed.
+                    Check the{' '}
+                    <ChakraLink
+                        as={Link}
+                        to='https://github.com/clerkinc/remix-bossa-nova-stack/blob/main/README.md'
+                        isExternal
+                        textDecoration='underline'
+                        color='white'
+                        _visited={{
+                            color: 'white',
+                        }}
+                    >
+                        README
+                    </ChakraLink>{' '}
+                    file for instructions on how to get this project deployed.
                 </Text>
 
                 <SignedOut>
