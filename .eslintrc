@@ -2,6 +2,8 @@
     "extends": [
         "@remix-run/eslint-config",
         "@remix-run/eslint-config/node",
+        "plugin:cypress/recommended",
+        "plugin:chai-friendly/recommended",
         "prettier"
     ],
     "env": {

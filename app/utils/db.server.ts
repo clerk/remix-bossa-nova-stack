@@ -1,5 +1,5 @@
 import { getAuth } from '@clerk/remix/ssr.server'
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
 export const getDB = async (
     request: Request,
@@ -14,8 +14,14 @@ export const getDB = async (
         const supabaseUrl = process.env.SUPABASE_URL || ''
         const supabaseKey = process.env.SUPABASE_ANON_KEY || ''
 
-        const client = createClient(supabaseUrl, supabaseKey)
-        client.auth.setAuth(secret)
+        const client = createClient(supabaseUrl, supabaseKey, {
+            global: {
+                headers: {
+                    Authorization: `Bearer ${secret}`,
+                },
+            },
+        })
+
         return client
     } catch (error) {
         return null
