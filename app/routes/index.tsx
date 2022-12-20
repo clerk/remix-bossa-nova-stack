@@ -28,7 +28,7 @@ export const loader: LoaderFunction = async ({ request }) => {
         return json({ error: dbErrorMessage })
     }
 
-    const { data } = await db.from('songs').select()
+    const { data } = await db.from('bossa_nova_songs').select()
 
     if (!data) {
         return json({ error: dbErrorMessage })
@@ -46,7 +46,7 @@ export const action: ActionFunction = async ({ request }) => {
     const db = await getDB(request)
     if (!db) return null
 
-    await db.from('songs').insert({ body: song, user_id: userId })
+    await db.from('bossa_nova_songs').insert({ body: song, user_id: userId })
     return null
 }
 
