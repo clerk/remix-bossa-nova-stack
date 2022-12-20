@@ -61,21 +61,21 @@ To make authenticated calls to a Supabase database, you'll need to use one of Cl
 
 > ❗️ This project is configured to use a JWT template named `supabase`, so use the same value when creating your JWT template on the [Clerk Dashboard](https://dashboard.clerk.dev/last-active?path=jwt-templates). Alternatively, you can change this value in `/app/utils/db.server.ts`.
 
-Also, you'll need to create a table called `songs` with the following columns in your Supabase database:
+Also, you'll need to create a table called `bossa_nova_songs` with the following columns in your Supabase database:
 
-| Column name | Column type |
-| ----------- | ----------- |
-| id          | uuid        |
-| created_at  | timestamptz |
-| user_id     | text        |
-| body        | text        |
+| Column name | Column type | Default value      |
+| ----------- | ----------- | ------------------ |
+| id          | uuid        | uuid_generate_v4() |
+| created_at  | timestamptz | now()              |
+| user_id     | text        |                    |
+| body        | text        |                    |
 
 In the end, it should look like this:
 
 <img width="1000" alt="App's screenshot" src="./public/images/supabase-columns.png">
 
 Next, we need to ensure that only authenticated users can add new songs and that these users can only retrieve songs they've added.
-For that, we'll enable RLS for the newly created `songs` table.
+For that, we'll enable RLS for the newly created `bossa_nova_songs` table.
 Head over to the SQL editor on your Supabase project, paste and run the following query:
 
 ```sql
@@ -89,7 +89,7 @@ $$;
 
 This will create a `requesting_user_id()` function that can be used within an RLS policy.
 
-Now, navigate to "Authentication", then "Policies", enable RLS for the `songs` table, if not yet enabled, and create two new policies from scratch.
+Now, navigate to "Authentication", then "Policies", enable RLS for the `bossa_nova_songs` table, if not yet enabled, and create two new policies from scratch.
 
 One for inserting new songs:
 
