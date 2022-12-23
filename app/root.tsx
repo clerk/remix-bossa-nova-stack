@@ -7,7 +7,7 @@ import {
     Scripts,
     ScrollRestoration,
 } from '@remix-run/react'
-import { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction } from '@remix-run/node'
 import { rootAuthLoader } from '@clerk/remix/ssr.server'
 import { ClerkApp, ClerkCatchBoundary } from '@clerk/remix'
 import { Box, ChakraProvider, Image } from '@chakra-ui/react'
@@ -64,6 +64,7 @@ const Document = withEmotionCache(
             })
             // Reset cache to reapply global styles
             clientStyleData?.reset()
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [])
 
         return (
